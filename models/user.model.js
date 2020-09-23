@@ -11,10 +11,8 @@ const db = require('../stores/db.store');
 const Joi = require('joi');
 
 class User extends Model {
-    constructor(id, role, firstName, lastName, email, password, role) {
-        this.id = id,
-            this.role = role,
-            this.firstName = firstName,
+    constructor(firstName, lastName, email, password, role) {
+        this.firstName = firstName,
             this.lastName = lastName,
             this.email = email,
             this.password = password,
@@ -39,8 +37,8 @@ class User extends Model {
         return false;
     }
 
-    async create() {
-        const jane = await User.create({
+    create() {
+        return User.create({
             role: this.role,
             firstName: this.firstName,
             lastName: this.lastName,

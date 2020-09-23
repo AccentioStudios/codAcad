@@ -1,74 +1,43 @@
-const express = require('express'),
-    router = express.Router();
+var express = require('express'),
+    router = express.Router(),
+    User = require('../models/user.model'),
+    logger = require('../middlewares/logger'),
+    RestResponse = require('../models/restResponse.model'),
+    ENUM = require('../helpers/enum.helpers')
 
-const genres = [{
-        id: 1,
-        name: 'Action'
-    },
-    {
-        id: 2,
-        name: 'Horror'
-    },
-    {
-        id: 3,
-        name: 'Romance'
-    },
-];
+class AccountController {
+
+    static async register(req, res) {
+        try {
+            const user = new User(
+                req.body.firstName,
+                req.body.lastName,
+                req.body.email,
+                req.body.password,
+                req.body.role,
+            );
+
+            var validate = User.validateSchema(user);
+            if (validate.error) {
+                res.status(400).send(RestResponse.badRequest(ENUM.BAD_REQUEST_NEW_USER));
+            }
+
+            let payload = await user.create();
+            res.send(payload);
+        } catch (exception) {
+            res.status(500).send(exception)
+        }
+    }
 
 
-router.get('/', (req, res) => {
-    res.send(genres);
-});
-
-router.post('/', (req, res) => {
-    const {
-        error
-    } = validateGenre(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    const genre = {
-        id: genres.length + 1,
-        name: req.body.name
-    };
-    genres.push(genre);
-    res.send(genre);
-});
-
-router.put('/:id', (req, res) => {
-    const genre = genres.find(c => c.id === parseInt(req.params.id));
-    if (!genre) return res.status(404).send('The genre with the given ID was not found.');
-
-    const {
-        error
-    } = validateGenre(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    genre.name = req.body.name;
-    res.send(genre);
-});
-
-router.delete('/:id', (req, res) => {
-    const genre = genres.find(c => c.id === parseInt(req.params.id));
-    if (!genre) return res.status(404).send('The genre with the given ID was not found.');
-
-    const index = genres.indexOf(genre);
-    genres.splice(index, 1);
-
-    res.send(genre);
-});
-
-router.get('/:id', (req, res) => {
-    const genre = genres.find(c => c.id === parseInt(req.params.id));
-    if (!genre) return res.status(404).send('The genre with the given ID was not found.');
-    res.send(genre);
-});
-
-function validateGenre(genre) {
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-    return Joi.validate(genre, schema);
+    static async getAll(req, res) {
+        try {
+            let payload = await AccountStore.getAllUsers(req);
+            res.send(payload);
+        } catch (exception) {
+            res.status(500).send(exception)
+        }
+    }
 }
 
-module.exports = router;
+module.exports = AccountController;
