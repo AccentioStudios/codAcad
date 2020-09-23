@@ -1,0 +1,37 @@
+{
+  "name": "cod_acad",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env-shell APP=%npm_package_name% \"echo Starting server: %npm_package_name%... && node -r dotenv/config ./index.js",
+    "serve": "cross-env-shell APP=%npm_package_name% \"echo Starting server (Hot Reload): %npm_package_name%... && nodemon -r dotenv/config ./index.js",
+    "debug": "cross-env-shell DEBUG=%npm_package_name%:* NODE_ENV=development npm run serve",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development npm run serve",
+    "prod": "cross-env NODE_ENV=production npm run start",
+    "prod-serve": "cross-env NODE_ENV=production npm run serve"
+  },
+  "keywords": [],
+  "author": "Accentio Studios",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "config": "^3.3.1",
+    "db-migrate": "^0.11.11",
+    "debug": "^4.2.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "joi": "^13.7.0",
+    "moment": "^2.29.0",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "pug": "^3.0.0",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2"
+  }
+}
