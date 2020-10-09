@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development npm run serve",
     "prod": "cross-env NODE_ENV=production npm run start",
-    "prod-serve": "cross-env NODE_ENV=production npm run serve"
+    "prod-serve": "cross-env NODE_ENV=production npm run serve",
+    "db-migrate": "node_modules/.bin/sequelize db:migrate"
   },
   "keywords": [],
   "author": "Accentio Studios",

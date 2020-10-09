@@ -1,31 +1,31 @@
 var express = require('express'),
     router = express.Router(),
-    User = require('../models/user.model'),
-    logger = require('../middlewares/logger'),
     RestResponse = require('../models/restResponse.model'),
-    ENUM = require('../helpers/enum.helpers')
+    ENUM = require('../helpers/enum.helpers'),
+    {
+        User
+    } = require('../stores/db.store');
+
+var developmentMode = process.env.NODE_ENV == 'production' ? false : true;
 
 class AccountController {
 
     static async register(req, res) {
+        console.log("Register Action...")
         try {
-            const user = new User(
-                req.body.firstName,
-                req.body.lastName,
-                req.body.email,
-                req.body.password,
-                req.body.role,
-            );
+            const newUser = req.body;
+            // var validate = user.validateSchema();
+            // if (validate.error) {
+            //     return res.status(400).send(RestResponse.badRequest(developmentMode ? validate.error : ENUM.BAD_REQUEST_NEW_USER));
+            // }
+            var payload = await User.create(req.body);
 
-            var validate = User.validateSchema(user);
-            if (validate.error) {
-                res.status(400).send(RestResponse.badRequest(ENUM.BAD_REQUEST_NEW_USER));
-            }
-
-            let payload = await user.create();
-            res.send(payload);
+            console.log("payload result", payload);
+            // console.log("payload", payload);
+            return res.send(payload);
         } catch (exception) {
-            res.status(500).send(exception)
+            console.log(exception);
+            return res.status(500).send(RestResponse.badRequest(developmentMode ? exception.message : ENUM.BAD_REQUEST_NEW_USER));
         }
     }
 

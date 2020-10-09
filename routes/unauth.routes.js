@@ -4,6 +4,6 @@ const unauth = express.Router();
 
 unauth
     .post('/account/register', AccountCtrl.register)
-    .post('/account/login', AccountCtrl.login)
+// .post('/account/login', AccountCtrl.login)
 
 module.exports = unauth;
